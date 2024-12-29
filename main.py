@@ -1,7 +1,9 @@
 import pandas as pd
 from sklearn import datasets
-from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
+from Model import Model
+from LinearSVCModel import LinearSVCModel
+from SGDclassifierModel import SGDclassifierModel
 
 
 
@@ -32,11 +34,13 @@ st.subheader('on veut prédire la catégorie de cette fleur')
 st.write(df_entree)
 
 def param_sortie():
+    
     iris=datasets.load_iris()
-    clf=RandomForestClassifier()
-    clf.fit(iris.data,iris.target)
+    lsvc = SGDclassifierModel()
+    model = Model(lsvc, iris.data, iris.target, df_entree)
+    prediction = model.predict()
+    print(prediction)
 
-    prediction=clf.predict(df_entree)
     donnees={
         'prediction':prediction,
         'nom_prediction':iris.target_names[prediction]
