@@ -1,9 +1,9 @@
 class Model():
 
-    def __init__(self, concrete_model , X, Y, features):
+    def __init__(self, concrete_model , data, features):
         self.setModel(concrete_model)
-        self.X = X
-        self.Y = Y
+        self.X = data.dfX
+        self.Y = data.dfY
         self.features = features
 
     def setModel(self, concrete_model):

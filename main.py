@@ -15,7 +15,7 @@ Il s'agit d'un exemple de l'interface elle sera ensuite agrémentée de plusieur
 st.sidebar.header("Les parmaètres d'entrée")
 
 def param_entree():
-    longeur_sepal= st.sidebar.slider('Longeur du zizi', 4.3, 7.9, 5.3)
+    longeur_sepal= st.sidebar.slider('Longeur du sepal', 4.3, 7.9, 5.3)
     largeur_sepal= st.sidebar.slider('Largeur du sepal', 2.0, 4.4, 3.3)
     longeur_petal= st.sidebar.slider('Longeur du petal', 1.0, 6.9, 2.3)
     largeur_petal= st.sidebar.slider('Largeur du petal', 0.1, 2.5, 1.3)
@@ -37,7 +37,7 @@ def param_sortie():
     
     iris=datasets.load_iris()
     lsvc = SGDclassifierModel()
-    model = Model(lsvc, iris.data, iris.target, df_entree)
+    model = Model(lsvc, iris, df_entree)
     prediction = model.predict()
     print(prediction)
 

@@ -14,6 +14,6 @@ class Data :
 
 
 test = Data("vehicule.csv")
-print(test.dfX.head())
-print(test.dfY.head())
+#print(test.dfX.head())
+#print(test.dfY.head())
 
