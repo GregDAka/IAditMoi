@@ -1,6 +1,8 @@
+from Data import Data
+
 class Model():
 
-    def __init__(self, concrete_model , data, features):
+    def __init__(self, concrete_model, data : Data, features):
         self.setModel(concrete_model)
         self.X = data.dfX
         self.Y = data.dfY

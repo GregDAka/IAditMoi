@@ -4,6 +4,7 @@ import streamlit as st
 from Model import Model
 from LinearSVCModel import LinearSVCModel
 from SGDclassifierModel import SGDclassifierModel
+from Data import Data
 
 
 
@@ -36,8 +37,8 @@ st.write(df_entree)
 def param_sortie():
     
     iris=datasets.load_iris()
-    lsvc = SGDclassifierModel()
-    model = Model(lsvc, iris, df_entree)
+    #MAIN NE MARCHE PAS CAR iris PAS DU TYPE Data DE GAB MAIS Model marche qu'avec Data mais osef c'est pas important
+    model = Model(SGDclassifierModel(), iris, df_entree)
     prediction = model.predict()
     print(prediction)
 
