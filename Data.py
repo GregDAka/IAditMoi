@@ -13,8 +13,16 @@ class Data :
         dfY=dataframe.iloc[:,-1:] #Que la dernière colone
         return dfX,dfY
 
+    def collectDataAttributes(self):
+        return list(self.dfX.columns)  # On récupère le nom de chaque colonne sauf la dernière
 
-test = Data("vehicule.csv")
+    def collectDataClasses(self):
+        return self.dfY.iloc[:, 0].unique()  # On récupère sans répétition le contenu de la dernière colonne 
+
+    def collectMinMaxValues(self, attribute):
+        return self.dfX[attribute].min(), self.dfX[attribute].max() # On récupère la valeur minimum et maximum d'une colonne donnée (sauf la dernière)'
+
+    
+test = Data("diabete.csv")
 #print(test.dfX.head())
 #print(test.dfY.head())
-
