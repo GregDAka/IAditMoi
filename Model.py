@@ -15,7 +15,8 @@ class Model():
         return self.model_chosed.predict(self.X, self.Y, self.features)
     
     def getConcreteModel(self):
-         return self.model_chosed
+         return self.model_chosed.getConcreteModel(self.X, self.Y)
+
 
 
 

@@ -45,19 +45,20 @@ user_inputs_df = pd.DataFrame([user_inputs]) # On converti les entrées utilisat
 
 # On met en place le modèle de prédiction et on l'effectue
 chosenModel = SGDclassifierModel()
+
+
 model = Model(chosenModel, data, user_inputs_df)
 prediction = model.predict()
+concreteModel = model.getConcreteModel()
 
 
 st.write("The predicted class is :",prediction) # On affiche la prédiction
 
 
 
-X = data.dfX.iloc[1:]
-explainer = shap.Explainer(model.model_chosed, X)
-"""
-shap_values = explainer(X)
+X = np.array([[6,148,72,35,6,33,4,50],[1,85,66,29,6,26,1,31]])
 
+X= data.dfX
+explainer = shap.Explainer(concreteModel, X)
+shap_values = explainer(X)
 st.write(shap.plots.waterfall(shap_values[0]))
-"""
-print(X)

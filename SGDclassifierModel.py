@@ -5,15 +5,12 @@ class SGDclassifierModel():
     def __init__(self):
         self.model = SGDClassifier()
 
-    def __call__(self, inputs):
-        return self.model.predict(inputs)
-
-
     def predict(self,X, Y, features):
         self.model.fit(X, Y)
         print(self.model.score(X, Y))
         print("J'utilise un SGDClassifier")
         return self.model.predict(features)
     
-    def getModel(self):
-        return self.model
+    def getConcreteModel(self,X,Y):
+         self.model.fit(X, Y)
+         return self.model

@@ -11,3 +11,7 @@ class LinearSVCModel():
         print(self.model.score(X, Y))
         print("J'utilise un LinearSVC")
         return self.model.predict(features)
+
+    def getConcreteModel(self,X,Y):
+         self.model.fit(X, Y)
+         return self.model
