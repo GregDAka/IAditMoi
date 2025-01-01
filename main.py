@@ -7,6 +7,7 @@ from LinearSVCModel import LinearSVCModel
 from SGDclassifierModel import SGDclassifierModel
 from Data import Data
 import shap
+import matplotlib.pyplot as plt
 
 # On charge le jeu de donnée (à voir pour le rendre modulaire + tard)
 csv_file = "diabete.csv"  # Modifier le nom entre guillemets en fonction du jeu de donnée qu'on veut
@@ -55,10 +56,11 @@ concreteModel = model.getConcreteModel()
 st.write("The predicted class is :",prediction) # On affiche la prédiction
 
 
-
-X = np.array([[6,148,72,35,6,33,4,50],[1,85,66,29,6,26,1,31]])
-
 X= data.dfX
 explainer = shap.Explainer(concreteModel, X)
 shap_values = explainer(X)
-st.write(shap.plots.waterfall(shap_values[0]))
+
+
+fig, ax = plt.subplots()
+shap.plots.waterfall(shap_values[0], show=False)
+st.pyplot(fig)
