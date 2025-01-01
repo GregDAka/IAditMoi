@@ -10,11 +10,12 @@ class Model():
 
     def setModel(self, concrete_model):
             self.model_chosed = concrete_model
-        
 
     def predict(self):
         return self.model_chosed.predict(self.X, self.Y, self.features)
-       
+    
+    def getConcreteModel(self):
+         return self.model_chosed
 
 
 

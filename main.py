@@ -1,10 +1,12 @@
 import pandas as pd
+import numpy as np
 from sklearn import datasets
 import streamlit as st
 from Model import Model
 from LinearSVCModel import LinearSVCModel
 from SGDclassifierModel import SGDclassifierModel
 from Data import Data
+import shap
 
 # On charge le jeu de donnée (à voir pour le rendre modulaire + tard)
 csv_file = "diabete.csv"  # Modifier le nom entre guillemets en fonction du jeu de donnée qu'on veut
@@ -48,3 +50,14 @@ prediction = model.predict()
 
 
 st.write("The predicted class is :",prediction) # On affiche la prédiction
+
+
+
+X = data.dfX.iloc[1:]
+explainer = shap.Explainer(model.model_chosed, X)
+"""
+shap_values = explainer(X)
+
+st.write(shap.plots.waterfall(shap_values[0]))
+"""
+print(X)
