@@ -9,9 +9,15 @@ from Data import Data
 import shap
 import matplotlib.pyplot as plt
 
+
+
+data = st.session_state.data
+
 # On charge le jeu de donnée (à voir pour le rendre modulaire + tard)
-csv_file = "diabete.csv"  # Modifier le nom entre guillemets en fonction du jeu de donnée qu'on veut
-data = Data(csv_file)
+
+
+#csv_file = "diabete.csv"  # Modifier le nom entre guillemets en fonction du jeu de donnée qu'on veut
+#data = Data(csv_file)
 
 attributes = data.collectDataAttributes() # On extrait les noms différents attributs du JDD (ex : *taille* de x, *longueur* de x etc)
 classes = data.collectDataClasses() # On extrait les différentes classes du JDD (ex : chat, chien, vache)
