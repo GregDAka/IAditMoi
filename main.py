@@ -61,12 +61,23 @@ if upload is not None:
 
     st.write("The predicted class is :",prediction) # On affiche la prédiction
 
-
+    #crée les shap values correspondant au model
     X= data.dfX
     explainer = shap.Explainer(concreteModel, X)
-    shap_values = explainer(X)
+    shap_values = explainer(user_inputs_df)
 
+    #si classes du dataset ne sont pas bianire (ex:van, saab, opel, bus)
+    if classes.__len__() > 2:
+        #on recherche l'indice correspondant à la prédiction pour donner la bonne dimension de shap values
+        for i in range(classes.__len__()):
+            if classes[i] == prediction:
+                raw_prediction = i
+        fig, ax = plt.subplots()
+        shap.plots.waterfall(shap_values[0][:,raw_prediction], show=False)
+        st.pyplot(fig)
+    #sinon
+    else:
 
-    fig, ax = plt.subplots()
-    shap.plots.waterfall(shap_values[0], show=False)
-    st.pyplot(fig)
+        fig, ax = plt.subplots()
+        shap.plots.waterfall(shap_values[0], show=False)
+        st.pyplot(fig)
