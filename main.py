@@ -73,11 +73,11 @@ if upload is not None:
             if classes[i] == prediction:
                 raw_prediction = i
         fig, ax = plt.subplots()
-        shap.plots.waterfall(shap_values[0][:,raw_prediction], show=False)
+        shap.plots.waterfall(shap_values[0][:,raw_prediction], show=False, max_display=50)
         st.pyplot(fig)
     #sinon
     else:
 
         fig, ax = plt.subplots()
-        shap.plots.waterfall(shap_values[0], show=False)
+        shap.plots.waterfall(shap_values[0], show=False, max_display=50)
         st.pyplot(fig)
