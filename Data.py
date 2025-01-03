@@ -21,8 +21,3 @@ class Data :
 
     def collectMinMaxValues(self, attribute):
         return self.dfX[attribute].min(), self.dfX[attribute].max() # On récupère la valeur minimum et maximum d'une colonne donnée (sauf la dernière)'
-
-    
-test = Data("diabete.csv")
-#print(test.dfX.head())
-#print(test.dfY.head())
