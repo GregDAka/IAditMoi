@@ -5,6 +5,7 @@ import streamlit as st
 from Model import Model
 from LinearSVCModel import LinearSVCModel
 from SGDclassifierModel import SGDclassifierModel
+from shapAnalyser import SHAPAnalyzer
 from Data import Data
 import shap
 import matplotlib.pyplot as plt
@@ -61,23 +62,11 @@ if upload is not None:
 
     st.write("The predicted class is :",prediction) # On affiche la prédiction
 
-    #crée les shap values correspondant au model
-    X= data.dfX
-    explainer = shap.Explainer(concreteModel, X)
-    shap_values = explainer(user_inputs_df)
+    shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
+    shap_analyzer.compute_shap_values()
 
-    #si classes du dataset ne sont pas bianire (ex:van, saab, opel, bus)
-    if classes.__len__() > 2:
-        #on recherche l'indice correspondant à la prédiction pour donner la bonne dimension de shap values
-        for i in range(classes.__len__()):
-            if classes[i] == prediction:
-                raw_prediction = i
-        fig, ax = plt.subplots()
-        shap.plots.waterfall(shap_values[0][:,raw_prediction], show=False)
-        st.pyplot(fig)
-    #sinon
-    else:
+    shap_analyzer.plot_waterfall(shap_analyzer.shap_values, classes, prediction)
 
-        fig, ax = plt.subplots()
-        shap.plots.waterfall(shap_values[0], show=False)
-        st.pyplot(fig)
+
+
+
