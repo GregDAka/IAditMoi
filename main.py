@@ -50,11 +50,19 @@ if upload is not None:
 
     user_inputs_df = pd.DataFrame([user_inputs]) # On converti les entrées utilisateurs(valeurs des sliders) en DataFrame pour la prédiction
 
-    # On met en place le modèle de prédiction et on l'effectue
-    chosenModel = SGDclassifierModel()
+    # On crée un dictionnaire avec la liste des modèles en place
+    modelOptions = {
+        "LinearSVC": LinearSVCModel,
+        "SGDclassifier": SGDclassifierModel,
+    }
 
-
-    model = Model(chosenModel, data, user_inputs_df)
+    #On crée une boîte de sélection dans l'interface pour rendre le choix du modèle flexible 
+    #(Permet aussi de changer de modèle sans avoir à redémarrer l'appli, bien plus pratique à l'utilisation)
+    modelUserSelection = st.selectbox("Select a Model (LinearSVC is used by default)", list(modelOptions.keys()))
+    
+    #On met en place le modèle choisi et sa prédiction puis l'effectue
+    chosenModel = modelOptions[modelUserSelection]
+    model = Model(chosenModel(), data, user_inputs_df)
     prediction = model.predict()
     concreteModel = model.getConcreteModel()
 
