@@ -64,10 +64,10 @@ if upload is not None:
     #On met en place le modèle choisi et sa prédiction puis l'effectue
     chosenModel = modelOptions[modelUserSelection]
     model = Model(chosenModel(), data, user_inputs_df)
-    prediction = model.predict()
+    prediction, accuracy = model.predict()
     concreteModel = model.getConcreteModel()
 
-
+    st.write(f"Model accuracy on chosen dataset : {accuracy:.5f}")
     st.write("The predicted class is :",prediction) # On affiche la prédiction
 
 
