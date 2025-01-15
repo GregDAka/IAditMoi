@@ -2,6 +2,7 @@ import shap
 import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
+from sklearn.metrics.pairwise import euclidean_distances
 
 class SHAPAnalyzer:
     def __init__(self, model, data, user_inputs_df):
@@ -67,5 +68,51 @@ class SHAPAnalyzer:
             fig, ax = plt.subplots()
             shap.plots.heatmap(self.shap_values)
             st.pyplot(fig)
+
+
+    def compute_fidelity(self):
+        if self.shap_values is None:
+            raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
+
+        # Calcul des prédictions approximées par SHAP
+        approx_preds = self.shap_values.values.sum(axis=1) + self.shap_values.base_values
+
+        # Prédictions originales du modèle
+        original_preds = self.model.predict(self.data)
+
+        # Vérifiez si les prédictions sont des chaînes et encodez-les
+        if isinstance(original_preds[0], str):
+            from sklearn.preprocessing import LabelEncoder
+            label_encoder = LabelEncoder()
+            original_preds = label_encoder.fit_transform(original_preds)
+
+        # Calcul de la fidélité
+        fidelity = np.corrcoef(original_preds, approx_preds)[0, 1]
+
+        return fidelity
+
+
+    def compute_stability(self, num_samples=10, noise=0.01):
+        """Calcule la stabilité des explications."""
+        if self.shap_values is None:
+            raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
+        stability_scores = []
+        for _ in range(num_samples):
+            perturbed_data = self.data + np.random.normal(0, noise, self.data.shape)
+            perturbed_shap_values = self.explainer(perturbed_data)
+            dist_original = euclidean_distances(self.shap_values.values, self.shap_values.values)
+            dist_perturbed = euclidean_distances(perturbed_shap_values.values, perturbed_shap_values.values)
+            stability_scores.append(np.corrcoef(dist_original.flatten(), dist_perturbed.flatten())[0, 1])
+        return np.mean(stability_scores)
+
+
+    def compute_robustness(self, perturbation_factor=0.1):
+        """Calcule la robustesse des explications."""
+        if self.shap_values is None:
+            raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
+        perturbed_data = self.data + np.random.normal(0, perturbation_factor, self.data.shape)
+        perturbed_shap_values = self.explainer(perturbed_data)
+        robustness_score = np.linalg.norm(self.shap_values.values - perturbed_shap_values.values)
+        return robustness_score
 
     
