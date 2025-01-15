@@ -7,9 +7,10 @@ class SGDclassifierModel():
 
     def predict(self,X, Y, features):
         self.model.fit(X, Y)
-        print(self.model.score(X, Y))
+        accuracy = self.model.score(X, Y)
         print("J'utilise un SGDClassifier")
-        return self.model.predict(features)
+        prediction = self.model.predict(features)
+        return prediction, accuracy
     
     def getConcreteModel(self,X,Y):
          self.model.fit(X, Y)
