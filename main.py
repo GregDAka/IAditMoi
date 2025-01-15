@@ -10,7 +10,7 @@ from Data import Data
 import shap
 import matplotlib.pyplot as plt
 
-
+st.set_page_config(page_title="Model Explainability")
 # Ici on gère l'import du CSV
 
 st.title("Machine Learning Model Explanation Project")
@@ -61,7 +61,7 @@ if upload is not None:
     #On crée une boîte de sélection dans l'interface pour rendre le choix du modèle flexible 
     #(Permet aussi de changer de modèle sans avoir à redémarrer l'appli, bien plus pratique à l'utilisation)
     modelUserSelection = st.selectbox("Select a Model (LinearSVC is used by default)", list(modelOptions.keys()))
-    
+        
     #On met en place le modèle choisi et sa prédiction puis l'effectue
     chosenModel = modelOptions[modelUserSelection]
     model = Model(chosenModel(), data, user_inputs_df)
@@ -76,11 +76,14 @@ if upload is not None:
     shap_analyzer.compute_shap_values()
     shap_analyzer.compute_shap_values_ui()
 
-    shap_analyzer.plot_waterfall(classes, prediction)
+    with st.spinner("Loading the Waterfall"):
+        shap_analyzer.plot_waterfall(classes, prediction)
 
-    shap_analyzer.Anal_summary_plot(classes, prediction)
+    with st.spinner("Loading the Summary Plot"):
+        shap_analyzer.Anal_summary_plot(classes, prediction)
 
-    shap_analyzer.Anal_heatmap(classes)
+    with st.spinner("Loading the Heatmap"):
+        shap_analyzer.Anal_heatmap(classes)
 
 
     # Calcul des métriques de qualité
