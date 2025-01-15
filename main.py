@@ -73,6 +73,7 @@ if upload is not None:
 
     shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
     shap_analyzer.compute_shap_values()
+    shap_analyzer.compute_shap_values_ui()
 
     shap_analyzer.plot_waterfall(classes, prediction)
 
