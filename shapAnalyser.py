@@ -15,12 +15,18 @@ class SHAPAnalyzer:
         self.explainer = shap.Explainer(model, data)
         self.user_inputs_df = user_inputs_df
         self.shap_values = None
+        self.shap_values_ui = None
     
     
     def compute_shap_values(self):
         """Calcule les valeurs SHAP pour les données fournies."""
         self.shap_values = self.explainer(self.data)
         print(np.shape(self.shap_values))
+
+    def compute_shap_values_ui(self):
+        """Calcule les valeurs SHAP pour les données fournies."""
+        self.shap_values_ui = self.explainer(self.user_inputs_df)
+        print(np.shape(self.shap_values_ui))
 
     def plot_waterfall(self, classes, prediction):
         """
@@ -36,7 +42,7 @@ class SHAPAnalyzer:
                 if classes[i] == prediction:
                     raw_prediction = i
             fig, ax = plt.subplots()
-            shap.plots.waterfall(self.shap_values[0][:,raw_prediction], show=False)
+            shap.plots.waterfall(self.shap_values_ui[0][:,raw_prediction], show=False)
             st.pyplot(fig)
         #sinon
         else:
