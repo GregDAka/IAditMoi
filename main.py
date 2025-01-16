@@ -68,35 +68,44 @@ if upload is not None:
     prediction, accuracy = model.predict()
     concreteModel = model.getConcreteModel()
 
-    st.write(f"Model accuracy on chosen dataset : {accuracy:.5f}")
+    st.write(f"Model accuracy on chosen dataset : {accuracy:.4f}")
     st.write("The predicted class is :",prediction) # On affiche la prédiction
 
+    colExp,colMet = st.columns([70,30],vertical_alignment="center")
+    col1,col2 = st.columns([70,30],vertical_alignment="top")
 
-    shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
-    shap_analyzer.compute_shap_values()
-    shap_analyzer.compute_shap_values_ui()
+    with colExp:
+        st.subheader("SHAP Explanation Plots")
+    with colMet:
+        st.subheader("Quality Metrics")
 
-    with st.spinner("Loading the Waterfall"):
-        shap_analyzer.plot_waterfall(classes, prediction)
+    with col1:
+        shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
+        shap_analyzer.compute_shap_values()
+        shap_analyzer.compute_shap_values_ui()
 
-    with st.spinner("Loading the Summary Plot"):
-        shap_analyzer.Anal_summary_plot(classes, prediction)
+        with st.spinner("Loading the Waterfall"):
+            shap_analyzer.plot_waterfall(classes, prediction)
 
-    with st.spinner("Loading the Heatmap"):
-        shap_analyzer.Anal_heatmap(classes)
+        with st.spinner("Loading the Summary Plot"):
+            shap_analyzer.Anal_summary_plot(classes, prediction)
 
+        with st.spinner("Loading the Heatmap"):
+            shap_analyzer.Anal_heatmap(classes)
 
-    # Calcul des métriques de qualité
-    fidelity = shap_analyzer.compute_fidelity()
-    stability = shap_analyzer.compute_stability()
-    robustness = shap_analyzer.compute_robustness()
+    with col2:
+        # Calcul des métriques de qualité
+        fidelity = shap_analyzer.compute_fidelity()
+        stability = shap_analyzer.compute_stability()
+        robustness = shap_analyzer.compute_robustness()
 
-    # Affichage des résultats dans Streamlit
-    st.subheader("Quality Metrics for Explanations")
-    st.write("Voici des mesures d'évaluation de vos explications SHAP :")
-    st.metric("Fidelity", f"{fidelity:.3f}", help="Corrélation entre prédictions du modèle et explications SHAP.")
-    st.metric("Stability", f"{stability:.3f}", help="Stabilité des explications pour des perturbations mineures.")
-    st.metric("Robustness", f"{robustness:.3f}", help="Différence entre explications avec et sans perturbations.")
+        # Affichage des résultats
+        with st.spinner("Loading Fidelity Metric"):
+            st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between model predictions and SHAP explanations")
+        with st.spinner("Loading Stability Metric"):
+            st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of explanations from minor noise")
+        with st.spinner("Loading Robustness Metric"):
+            st.metric("Robustness", f"{robustness:.3f}",border=True, help="Difference between explanations with and without noise")
 
 
 
