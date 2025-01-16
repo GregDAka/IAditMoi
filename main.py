@@ -6,8 +6,9 @@ from SGDclassifierModel import SGDclassifierModel
 from shapAnalyser import SHAPAnalyzer
 from Data import Data
 
-
+st.set_page_config(page_title="Model Explainability")
 # Ici on gère l'import du CSV
+
 st.title("Machine Learning Model Explanation Project")
 st.write('''
 To begin, import your data in csv form. The first line of the csv are the attributes and the last column is the target
@@ -56,7 +57,7 @@ if upload is not None:
     #On crée une boîte de sélection dans l'interface pour rendre le choix du modèle flexible 
     #(Permet aussi de changer de modèle sans avoir à redémarrer l'appli, bien plus pratique à l'utilisation)
     modelUserSelection = st.selectbox("Select a Model (LinearSVC is used by default)", list(modelOptions.keys()))
-    
+        
     #On met en place le modèle choisi et sa prédiction puis l'effectue
     chosenModel = modelOptions[modelUserSelection]
     model = Model(chosenModel(), data, user_inputs_df)
@@ -69,12 +70,29 @@ if upload is not None:
 
     shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
     shap_analyzer.compute_shap_values()
+    shap_analyzer.compute_shap_values_ui()
 
-    shap_analyzer.plot_waterfall(classes, prediction)
+    with st.spinner("Loading the Waterfall"):
+        shap_analyzer.plot_waterfall(classes, prediction)
 
-    shap_analyzer.Anal_summary_plot(classes, prediction)
+    with st.spinner("Loading the Summary Plot"):
+        shap_analyzer.Anal_summary_plot(classes, prediction)
 
-    shap_analyzer.Anal_heatmap(classes)
+    with st.spinner("Loading the Heatmap"):
+        shap_analyzer.Anal_heatmap(classes)
+
+
+    # Calcul des métriques de qualité
+    fidelity = shap_analyzer.compute_fidelity()
+    stability = shap_analyzer.compute_stability()
+    robustness = shap_analyzer.compute_robustness()
+
+    # Affichage des résultats dans Streamlit
+    st.subheader("Quality Metrics for Explanations")
+    st.write("Voici des mesures d'évaluation de vos explications SHAP :")
+    st.metric("Fidelity", f"{fidelity:.3f}", help="Corrélation entre prédictions du modèle et explications SHAP.")
+    st.metric("Stability", f"{stability:.3f}", help="Stabilité des explications pour des perturbations mineures.")
+    st.metric("Robustness", f"{robustness:.3f}", help="Différence entre explications avec et sans perturbations.")
 
 
 
