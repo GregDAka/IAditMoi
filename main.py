@@ -1,14 +1,10 @@
 import pandas as pd
-import numpy as np
-from sklearn import datasets
 import streamlit as st
 from Model import Model
 from LinearSVCModel import LinearSVCModel
 from SGDclassifierModel import SGDclassifierModel
 from shapAnalyser import SHAPAnalyzer
 from Data import Data
-import shap
-import matplotlib.pyplot as plt
 
 
 # Ici on gère l'import du CSV
