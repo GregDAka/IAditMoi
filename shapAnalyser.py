@@ -50,7 +50,7 @@ class SHAPAnalyzer:
         else:
             #cas binaire
             fig, ax = plt.subplots()
-            shap.plots.waterfall(self.shap_values[0], show=False)
+            shap.plots.waterfall(self.shap_values_ui[0], show=False)
             st.pyplot(fig)
 
     

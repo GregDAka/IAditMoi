@@ -81,12 +81,15 @@ if upload is not None:
         shap_analyzer.compute_shap_values_ui()
 
         with st.spinner("Loading the Waterfall"):
+            st.write("Waterfall plot : useful for analyzing feature contributions for an individual observation")
             shap_analyzer.plot_waterfall(classes, prediction)
 
         with st.spinner("Loading the Summary Plot"):
+            st.write("Summary plot : provides a comprehensive overview of important features across all observations")
             shap_analyzer.Anal_summary_plot(classes, prediction)
 
         with st.spinner("Loading the Heatmap"):
+            st.write("Heatmap : allows you to visualize the interactions between characteristics and their overall contributions.")
             shap_analyzer.Anal_heatmap(classes)
 
     with col2:
