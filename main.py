@@ -93,15 +93,13 @@ if upload is not None:
         # Calcul des métriques de qualité
         fidelity = shap_analyzer.compute_fidelity()
         stability = shap_analyzer.compute_stability()
-        robustness = shap_analyzer.compute_robustness()
+        
 
         # Affichage des résultats
         with st.spinner("Loading Fidelity Metric"):
             st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between model predictions and SHAP explanations")
         with st.spinner("Loading Stability Metric"):
             st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of explanations from minor noise")
-        with st.spinner("Loading Robustness Metric"):
-            st.metric("Robustness", f"{robustness:.3f}",border=True, help="Difference between explanations with and without noise")
 
 
 
