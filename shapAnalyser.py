@@ -108,11 +108,20 @@ class SHAPAnalyzer:
         if self.shap_values is None:
             raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
         stability_scores = []
+
+        #On veut réaliser plusieurs perturbation (num_samples) sur les données d'entrée
         for _ in range(num_samples):
+            #On génère des données pertrubés grâce à la génération de valeurs aléatoires
             perturbed_data = self.data + np.random.normal(0, noise, self.data.shape)
-            perturbed_shap_values = self.explainer(perturbed_data)
-            dist_original = euclidean_distances(self.shap_values.values, self.shap_values.values)
-            dist_perturbed = euclidean_distances(perturbed_shap_values.values, perturbed_shap_values.values)
+            #On calcule les valeurs SHAP pour les données perturbées
+            perturbed_shap_values = self.explainer(perturbed_data) 
+            #On calcule la distance entre les valeurs shap ORIGINAL
+            #On dit que c'est une mesure de la proximité entre les pairs de valeurs SHAP originale 
+            dist_original = euclidean_distances(self.shap_values.values, self.shap_values.values) 
+            #Calcule la distance mais acvec les valeurs perturbées 
+            dist_perturbed = euclidean_distances(perturbed_shap_values.values, perturbed_shap_values.values) 
+            
+            #On ajoute à la liste de score le calcule de la corrélation entre les distances originales et les distances perturbées
             stability_scores.append(np.corrcoef(dist_original.flatten(), dist_perturbed.flatten())[0, 1])
         return np.mean(stability_scores)
 
