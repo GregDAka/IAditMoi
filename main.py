@@ -21,11 +21,8 @@ if upload is not None:
     attributes = data.collectDataAttributes() # On extrait les noms différents attributs du JDD (ex : *taille* de x, *longueur* de x etc)
     classes = data.collectDataClasses() # On extrait les différentes classes du JDD (ex : chat, chien, vache)
 
-    st.write('''
-    Welcome to an example of a prediction application with a Machine Learning model.
-    What you're seeing is an example of the interface which will later be further enhanced with several elements of explainability.
-    For now, only the modularity of the data set is in place although its selection itself isn't yet.
-    ''')
+    st.write("Welcome, this application simplifies ML usage and understanding by providing through SHAP Explanations and Quality Metrics for predictions.")
+    st.write("This project was developped by four students - DUBOULOY Grégory, DUFOUR Benoît, DELEMASURE Gabriel and BEAUCOUSIN Enzo as part of an academic project. We hope that through its usage, this application proves useful to you.")
 
     # On définie de manière modulaire nos sliders de customisation des paramètres d'attributs à gauche dans l'interface
     st.sidebar.header("Slide to Modify Attribute Values")
@@ -76,37 +73,40 @@ if upload is not None:
         st.subheader("Quality Metrics")
 
     with col1:
+        # On calcule les valeurs SHAP pour les valeurs fournies
         shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
         shap_analyzer.compute_shap_values()
         shap_analyzer.compute_shap_values_ui()
 
+        # On affiche les plots SHAP 
+        st.write("Waterfall Plot: useful for analyzing feature contributions for an individual observation")
         with st.spinner("Loading the Waterfall"):
-            st.write("Waterfall plot : useful for analyzing feature contributions for an individual observation")
             shap_analyzer.plot_waterfall(classes, prediction)
 
+        st.write("Summary Plot: provides a comprehensive overview of important features across all observations")
         with st.spinner("Loading the Summary Plot"):
-            st.write("Summary plot : provides a comprehensive overview of important features across all observations")
             shap_analyzer.Anal_summary_plot(classes, prediction)
 
+        st.write("Heatmap Plot: allows visualization of the interactions between characteristics and their overall contributions.")
         with st.spinner("Loading the Heatmap"):
-            st.write("Heatmap : allows you to visualize the interactions between characteristics and their overall contributions.")
             shap_analyzer.Anal_heatmap(classes)
 
     with col2:
 
+        # Si on a une classification binaire, on calcule puis affiche les mesures de qualités
         if classes.__len__() <= 2:
-            # Calcul des métriques de qualité
+            # On calcul des mesures de qualité
             fidelity = shap_analyzer.compute_fidelity()
             stability = shap_analyzer.compute_stability()
             
 
-            # Affichage des résultats
+            # On affiche les résultats
             with st.spinner("Loading Fidelity Metric"):
-                st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between model predictions and SHAP explanations")
+                st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between Model predictions and SHAP Explanations")
             with st.spinner("Loading Stability Metric"):
-                st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of explanations from minor noise")
+                st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of Explanations when put under a small amount of noise")
         else : 
-            st.write("No quality metrics avaible if more than two targets")
+            st.write("No Quality Metrics available if more than two targets")
 
 
 
