@@ -90,16 +90,21 @@ if upload is not None:
             shap_analyzer.Anal_heatmap(classes)
 
     with col2:
-        # Calcul des métriques de qualité
-        fidelity = shap_analyzer.compute_fidelity()
-        stability = shap_analyzer.compute_stability()
-        
 
-        # Affichage des résultats
-        with st.spinner("Loading Fidelity Metric"):
-            st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between model predictions and SHAP explanations")
-        with st.spinner("Loading Stability Metric"):
-            st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of explanations from minor noise")
+        if classes.__len__() <= 2:
+            # Calcul des métriques de qualité
+            fidelity = shap_analyzer.compute_fidelity()
+            stability = shap_analyzer.compute_stability()
+            
+
+            # Affichage des résultats
+            with st.spinner("Loading Fidelity Metric"):
+                st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between model predictions and SHAP explanations")
+            with st.spinner("Loading Stability Metric"):
+                st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of explanations from minor noise")
+        else : 
+            st.write("No quality metrics avaible if more than two targets")
+
 
 
 
