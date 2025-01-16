@@ -12,7 +12,7 @@ class SGDclassifierModel():
     def __init__(self):
         self.model = SGDClassifier()
 
-    def predict(self,X, Y, features):
+    def predict(self,X, Y, user_inputs):
         """
         Fournie les data nécessaire poue entrainer le modèle puis prédire.
         Renvoie la prédiction et le score du model.
@@ -23,7 +23,7 @@ class SGDclassifierModel():
         self.model.fit(X, Y)
         accuracy = self.model.score(X, Y)
         print("J'utilise un SGDClassifier")
-        prediction = self.model.predict(features)
+        prediction = self.model.predict(user_inputs)
         return prediction, accuracy
     
     def getConcreteModel(self,X,Y):
