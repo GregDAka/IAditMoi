@@ -73,7 +73,7 @@ if upload is not None:
         st.subheader("Quality Metrics")
 
     with col1:
-        # On calcule les valeurs SHAP pour les valeurs fournies
+        # On calcule les valeurs SHAP pour les data du csv fournies et pour les valeurs choisis par l'utilisateur
         shap_analyzer = SHAPAnalyzer(concreteModel,data.dfX, user_inputs_df)
         shap_analyzer.compute_shap_values()
         shap_analyzer.compute_shap_values_ui()
@@ -87,9 +87,10 @@ if upload is not None:
         with st.spinner("Loading the Summary Plot"):
             shap_analyzer.Anal_summary_plot(classes, prediction)
 
-        st.write("Heatmap Plot: allows visualization of the interactions between characteristics and their overall contributions.")
-        with st.spinner("Loading the Heatmap"):
-            shap_analyzer.Anal_heatmap(classes)
+        if classes.__len__() <= 2:
+            st.write("Heatmap Plot: allows visualization of the interactions between characteristics and their overall contributions.")
+            with st.spinner("Loading the Heatmap"):
+                shap_analyzer.Anal_heatmap(classes)
 
     with col2:
 
@@ -102,9 +103,9 @@ if upload is not None:
 
             # On affiche les résultats
             with st.spinner("Loading Fidelity Metric"):
-                st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Correlation between Model predictions and SHAP Explanations")
+                st.metric("Fidelity", f"{fidelity:.3f}",border=True, help="Faithfulness, it assesses if the explanation given is representative of the model's operation (1 = great, 0 = awful)")
             with st.spinner("Loading Stability Metric"):
-                st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of Explanations when put under a small amount of noise")
+                st.metric("Stability", f"{stability:.3f}",border=True, help="Stability of Explanations when a small alteration comes into our data (1 = great, 0 = awful)")
         else : 
             st.write("No Quality Metrics available if more than two targets")
 

@@ -5,13 +5,18 @@ import streamlit as st
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import LabelEncoder
 
+"""
+Cette classe s'occupe de générer et afficher les explications de la prédiction ainsi que les mesures de qualités des explications
+Attributs:
+    model: Le modèle entraîné (par exemple, LinearSVCModel).
+    data: Données sur lesquelles le modèle a été entraîné (ex. data.dfX).
+    explainer: Explainer créé à l'aide de shap pour notre modèle.
+    user_inputs_df: Données fournies par l'utilisateur pour une analyse personnalisée.
+    shap_values: Valeure explicative de nos données selon notre modèle.
+    shap_values_ui: Pareil mais avec les données issuent des sliders dans l'application.
+"""
 class SHAPAnalyzer:
     def __init__(self, model, data, user_inputs_df):
-        """
-        model: Le modèle entraîné (par exemple, LinearSVC).
-        data: Données sur lesquelles le modèle a été entraîné (ex. data.dfX).
-        user_inputs_df: Données fournies par l'utilisateur pour une analyse personnalisée.
-        """
         self.model = model
         self.data = data
         self.explainer = shap.Explainer(model, data)  # Initialisation de l'explainer SHAP.
@@ -87,6 +92,10 @@ class SHAPAnalyzer:
 
 
     def compute_fidelity(self):
+        """
+        Part des shap values pour recalculer les prédictions et en comparant les prédictions originelles aux nouvelles 
+        on estime le bon fonctionnement des explications pour le modèle.
+        """
         if self.shap_values is None:
             raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
         # Calcul des prédictions approximées par SHAP
@@ -95,7 +104,6 @@ class SHAPAnalyzer:
         original_preds = self.model.predict(self.data)
         # Vérifiez si les prédictions sont des chaînes et encodez-les
         if isinstance(original_preds[0], str):
-            from sklearn.preprocessing import LabelEncoder
             label_encoder = LabelEncoder()
             original_preds = label_encoder.fit_transform(original_preds)
         # Calcul de la fidélité
@@ -104,7 +112,7 @@ class SHAPAnalyzer:
     
 
     def compute_stability(self, num_samples=10, noise=0.2):
-        """Calcule la stabilité des explications."""
+        """Calcule la stabilité des explications aprés une legère altération des données."""
         if self.shap_values is None:
             raise ValueError("Les valeurs SHAP n'ont pas encore été calculées.")
         stability_scores = []
