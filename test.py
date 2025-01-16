@@ -1,4 +1,3 @@
-from sklearn import datasets
 import shap
 from sklearn.linear_model import SGDClassifier
 
