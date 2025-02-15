@@ -1,4 +1,5 @@
 Ce repo est un projet de license. C'est une app web qui permet d'expliquer des prédicitons de model d'apprentissage.
+
 Courte démonstration vidéo dans 'Demo.mp4'
 
 pour lancer le code :
